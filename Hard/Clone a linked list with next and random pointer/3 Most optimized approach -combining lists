@@ -46,14 +46,29 @@ class Solution
         //reassigning iterator for both lists
         curr=head;
         temp=root;
+
         // assign random pointer 
-        while(curr)
-        {
-            temp=curr->next;
-            if(curr->arb)                     // if random pointer exists then only assign
-            temp->arb=curr->arb->next;          //assigning the random pointer 
-            curr=temp->next;
+        while(curr)                                                                           
+        {                                                                                    
+            temp=curr->next;                                                                  
+            if(curr->arb)                     // if random pointer exists then only assign   
+            temp->arb=curr->arb->next;          //assigning the random pointer              
+            curr=temp->next;                                                                                                                                               
         }
+
+
+        // while(curr)
+        // {
+        //     if(curr->arb)                     // if random pointer exists then only assign
+        //     temp->arb=curr->arb->next;          //assigning the random pointer 
+            
+        //     if(temp->next==NULL)
+        //     break;
+        //     temp=temp->next->next;            
+        //     curr=curr->next->next;
+        // }
+
+
         
         // now we have to disconnect the original and cloned linked list 
         curr=head;
