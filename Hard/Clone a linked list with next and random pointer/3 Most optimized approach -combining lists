@@ -1,0 +1,73 @@
+
+// } Driver Code Ends
+class Solution
+{
+    public:
+    
+    //TC == O(n)
+    //SC = O(1)
+    //1--> create cloned linked list 
+    //2--> insert cloned LL in original list 
+    //3--> assign random pointer
+    //4--> disconnect both lists
+    
+    
+    Node *copyList(Node *head)
+    {
+        Node*root=new Node(0);//curr==pointer for iterating on original list 
+        Node*temp=root;     // temp==pointer for iterating on cloned list 
+        Node*curr=head;
+        while(curr)
+        {
+            temp->next=new Node(curr->data);
+            curr=curr->next;
+            temp=temp->next;
+        }
+        temp=root;
+        root=root->next;
+        delete(temp);
+        
+        // reassigning iterator for both lists
+        curr=head;
+        temp=root;
+        Node*front1=head;
+        Node*front2=root;
+        // insertion of cloned linked list in original list 
+        while(curr)
+        {
+            front1=curr->next;
+            front2=temp->next;
+            curr->next=temp;
+            temp->next=front1;
+            curr=front1;
+            temp=front2;
+        }
+        
+        //reassigning iterator for both lists
+        curr=head;
+        temp=root;
+        // assign random pointer 
+        while(curr)
+        {
+            temp=curr->next;
+            if(curr->arb)                     // if random pointer exists then only assign
+            temp->arb=curr->arb->next;          //assigning the random pointer 
+            curr=temp->next;
+        }
+        
+        // now we have to disconnect the original and cloned linked list 
+        curr=head;
+        Node*front=head;
+        while(curr->next)
+        {
+            front=curr->next;
+            curr->next=curr->next->next;
+            curr=front;
+        }
+        
+        return root;
+        
+        
+    }
+
+};
