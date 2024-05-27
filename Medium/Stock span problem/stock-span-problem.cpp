@@ -5,7 +5,7 @@ using namespace std;
 
 // } Driver Code Ends
 
-
+//solution 1=> similiar to next greatest element from left
 class Solution
 {
     public:
@@ -35,6 +35,35 @@ class Solution
     }
 };
 
+//sloution =>2
+class Solution
+{
+    public:
+    //Function to calculate the span of stockâ€™s price for all n days.
+    vector <int> calculateSpan(int price[], int n)
+    {
+       // Your code here
+       vector<int>ans(n,-1);
+       stack<int>s;
+       for(int i=n-1;i>=0;i--)
+        {
+            while(!s.empty()&&price[i]>price[s.top()])
+            {
+                ans[s.top()]=i;
+                
+                s.pop();
+            }
+            s.push(i);
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            ans[i]=i-ans[i];
+        }
+        
+        return ans;
+    }
+};
 
 
 //{ Driver Code Starts.
