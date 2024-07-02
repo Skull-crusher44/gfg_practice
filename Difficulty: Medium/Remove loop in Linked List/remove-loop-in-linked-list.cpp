@@ -1,89 +1,10 @@
-//{ Driver Code Starts
-// driver code
-
-#include <bits/stdc++.h>
-using namespace std;
-
-struct Node
-{
-    int data;
-    Node* next;
-    
-    Node(int val)
-    {
-        data = val;
-        next = NULL;
-    }
-};
-
-void loopHere(Node* head, Node* tail, int position)
-{
-    if(position==0) return;
-    
-    Node* walk = head;
-    for(int i=1; i<position; i++)
-        walk = walk->next;
-    tail->next = walk;
-}
-
-bool isLoop(Node* head)
-{
-    if(!head) return false;
-    
-    Node* fast = head->next;
-    Node* slow = head;
-    
-    while( fast != slow)
-    {
-        if( !fast || !fast->next ) return false;
-        fast=fast->next->next;
-        slow=slow->next;
-    }
-    
-    return true;
-}
-
-int length(Node* head)
-{
-    int ret = 0;
-    while(head)
-    {
-        ret++;
-        head = head->next;
-    }
-    return ret;
-}
-
-bool notOriginal(Node *head, unordered_map<Node *, int>&myMap){
-    
-    while(head){
-        if(myMap.find(head)==myMap.end()) return true;
-        if(myMap[head] != (head->data)) return true;
-        
-        head=head->next;
-    }
-}
 
 
-
-
-// } Driver Code Ends
-/*
-structure of linked list node:
-
-struct Node
-{
-    int data;
-    Node* next;
-    
-    Node(int val)
-    {
-        data = val;
-        next = NULL;
-    }
-};
-
-*/
+//Solution 1
+// detect a loop 
+// slow = head  
+// slow=slow->next and fast=fast->next
+// Break the loop
 
 class Solution
 {
@@ -91,10 +12,11 @@ class Solution
     //Function to remove a loop in the linked list.
     void removeLoop(Node* head)
     {
-        // code he re
+       
         // just remove the loop without losing any nodes
         Node*slow=head,*fast=head;
-        
+
+	    	// detect a loop (loop break hone ka mtlb ha ya to loop exist karta ya nahi karta ha )
         while(fast&&fast->next)
         {
             slow=slow->next;
@@ -102,10 +24,10 @@ class Solution
             if(slow==fast)
             break;
         }
-        
+        	//condition for loop not existing
         if(fast==NULL||fast->next==NULL)
         return;
-        
+        		// slow aur fast ko ek ek step aage badhao
                 slow=head;              // Node*prev=NULL;
                 while(slow!=fast)
                 {
@@ -114,6 +36,8 @@ class Solution
                     fast=fast->next;
                 }
                 // here previous pointer concept will not work
+
+	    		// to break loop slow pointer ko last node pe leke aao 
                 while(slow->next!=fast)
                 {
                     slow=slow->next;
@@ -124,46 +48,61 @@ class Solution
 };
 
 
-//{ Driver Code Starts.
-
-int main()
+//Solution 2
+// detect a loop 
+// count no of nodes
+// fast pointer ko no of nodes times agge bdha diya 
+// slow=slow->next and fast=fast->next
+// Break the loop
+class Solution
 {
-    int t;
-    cin>>t;
-    while(t--)
+    public:
+    //Function to remove a loop in the linked list.
+    void removeLoop(Node* head)
     {
-        unordered_map<Node *, int>myMap;
-        
-        int n, num;
-        cin>>n;
-        
-        Node *head, *tail;
-        cin>> num;
-        head = tail = new Node(num);
-        
-        myMap[head]=num;
-        
-        for(int i=0 ; i<n-1 ; i++)
-        {
-            cin>> num;
-            tail->next = new Node(num);
-            tail = tail->next;
-            myMap[tail]=num;
-        }
-        
-        int pos;
-        cin>> pos;
-        loopHere(head,tail,pos);
-        
-        Solution ob;
-        ob.removeLoop(head);
-        
-        if( isLoop(head) || length(head)!=n || notOriginal(head, myMap))
-            cout<<"0\n";
-        else
-            cout<<"1\n";
-    }
-	return 0;
-}
+        // just remove the loop without losing any nodes
+        Node*slow=head,*fast=head;
 
-// } Driver Code Ends
+	    // detect a loop (loop break hone ka mtlb ha ya to loop exist karta ya nahi karta ha )
+        while(fast&&fast->next)
+        {
+            slow=slow->next;
+            fast=fast->next->next;
+            if(slow==fast)
+            break;
+        }
+        	// if loop does not exist 
+        if(fast==NULL||fast->next==NULL)
+        return;
+
+	    // count no of nodes
+        int count=1;
+        slow=fast->next;
+        while(slow!=fast)
+        {
+            count++;
+            slow=slow->next;
+        }
+
+	    // fast pointer ko no of nodes times agge bdha diya 
+        slow=head;
+        fast=head;
+        while(count--)
+        {
+            fast=fast->next;
+        }
+        	// jab tak slow and fast poointers milte nahi tab tak increment karenge 
+	    	// isse dono loop ke joint pe aa jayenge
+        while(slow!=fast)
+        {
+            fast=fast->next;
+            slow=slow->next;
+        }
+
+	    	//loop break karna ha 
+        while(slow->next!=fast)
+        slow=slow->next;
+        slow->next=NULL;
+        
+    }
+};
