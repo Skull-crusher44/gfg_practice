@@ -97,22 +97,38 @@ struct Node {
 class Solution{
     public:
     vector<int> postOrder(Node* node) {
-        // code here
-        
-        stack<Node*>s;
         vector<int>ans;
-        s.push(node);
-        
-        while(!s.empty())
+        Node*root=node;
+        while(root)
         {
-            Node*temp=s.top();
-            ans.push_back(temp->data);
-            s.pop();
-            if(temp->left)s.push(temp->left);
-            if(temp->right)s.push(temp->right);
+            if(!root->right)
+            {
+                ans.push_back(root->data);
+                root=root->left;
+            }
+            else{
+                
+                Node*temp=root->right;
+                while(temp->left&&temp->left!=root)
+                {
+                    temp=temp->left;
+                }
+                // if right part not traverse
+                if(!temp->left)
+                {
+                    ans.push_back(root->data);
+                    temp->left=root;
+                    root=root->right;
+                }
+                else
+                {   //if right part already traverse
+                    temp->left=NULL;
+                    root=root->left;
+                }
+            }
         }
         reverse(ans.begin(),ans.end());
-    return ans;
+        return ans;
     }
 };
 
