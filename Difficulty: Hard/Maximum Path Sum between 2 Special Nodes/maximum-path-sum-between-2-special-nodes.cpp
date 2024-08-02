@@ -102,14 +102,16 @@ public:
         int left=solve(root->left,sum);
         int right=solve(root->right,sum);
         
+        // update tabhi karna ha jab root ke left and right dono exist karte hoon
         if(root->left&&root->right)
         {
             sum= max(sum,left+right+root->data);
             return max(left,right)+root->data;
         }
-        if(root->left)
-        {
-            return root->data+left;
+        //AGAR LEFT EXIST KARE TO LEFT KA MAX SUM +ROOT->DATA RETURN KARO                                                  7
+        if(root->left)                          //     7      
+        {                                       //       8 MAX(-9,0)+8 => 8 (JO KI WRONG HA)
+            return root->data+left;             //    -9
         }
         if(root->right)
         {
@@ -120,9 +122,11 @@ public:
     {
         int sum=INT_MIN;
         int val= solve(root,sum);
+        
         if(root->left&&root->right)
         return sum;
-        
+        // IF ROOT KA YA TO LEFT TREE TA RIGHT TREE HO TO SUM=int_min(KOI UPDATION NAHI HOGA 
+        // JABKI VAL ME (FUNCTION RETURN KAREGA USME ) KOI VALUE AAYEGE TO HAME DONO ME MAX RETURN KARNA HA 
         return max(sum,val);
     }
 };
