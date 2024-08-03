@@ -105,27 +105,61 @@ class Solution{
     public:
     //Function to check whether all nodes of a tree have the value 
     //equal to the sum of their child nodes.
-    bool check(Node*root)
+     bool check(Node* root)
     {
-        if(!root)return true;
-        if(!root->left&&!root->right)
-        return true;
+        // Base case: If the node is null, it satisfies the sum property by definition
+        if (!root) return true;
+        
+        // Base case: If the node is a leaf (no children), it satisfies the sum property
+        if (!root->left && !root->right) return true;
+        
+        // Recursively check the left and right subtrees
         bool left = check(root->left);
         bool right = check(root->right);
         
-        int left_val=(root->left)?root->left->data:0;
-        int right_val=(root->right)?root->right->data:0;
+        // Get the value of the left child, or 0 if there is no left child
+        int left_val = (root->left) ? root->left->data : 0;
         
-        bool root_check=false;
-        if(root->data==(left_val+right_val))
-        root_check =true;
+        // Get the value of the right child, or 0 if there is no right child
+        int right_val = (root->right) ? root->right->data : 0;
         
-        return (left&&right&&root_check);
+        // Check if the current node's value is equal to the sum of its children's values
+        bool root_check = false;
+        if (root->data == (left_val + right_val))
+            root_check = true;
+        
+        // Return true if both subtrees satisfy the sum property and the current node satisfies it as well
+        return (left && right && root_check);
     }
-    int isSumProperty(Node *root)
+    
+    int isSumProperty(Node* root)
     {
-     return check(root);
+        return check(root);
     }
+/*
+Stepwise Algorithm
+Base Cases:
+
+If the current node (root) is nullptr, return true.
+If the current node is a leaf (no left or right children), return true.
+Recursive Checks:
+
+Recursively call the check function on the left child (root->left).
+Recursively call the check function on the right child (root->right).
+Value Retrieval:
+
+If the left child exists, store its value in left_val, otherwise set left_val to 0.
+If the right child exists, store its value in right_val, otherwise set right_val to 0.
+Current Node Check:
+
+Check if the current node's value is equal to the sum of left_val and right_val.
+Store the result of this check in root_check.
+Return Result:
+
+Return true if both the left and right subtrees satisfy the sum property and the current node satisfies the sum property (left && right && root_check).
+Wrapper Function:
+
+Call the check function with the root of the tree and return its result.*/
 };
 
 //{ Driver Code Starts.
