@@ -18,7 +18,6 @@ class Solution {
        {
            if(arr[i]>q.top())
            {
-               ans[i]=q.top();
                q.pop();
                q.push(arr[i]);
            }
