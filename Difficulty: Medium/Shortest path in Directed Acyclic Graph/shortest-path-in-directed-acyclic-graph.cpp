@@ -6,10 +6,11 @@ using namespace std;
 
 // } Driver Code Ends
 // User function Template for C++
+
 class Solution {
   public:
-  void dfs(int curr, vector<pair<int,int>>adj[], vector<int>&ans, vector<bool>&visited)
-  {
+  void dfs(int curr, vector<pair<int,int>>adj[], vector<bool>&visited,stack<int>&s)
+   {
       visited[curr]=true;
         for(auto it : adj[curr])
             {
@@ -17,20 +18,12 @@ class Solution {
                 int weight=it.second;
                 if(!visited[ele])
                 {
-                    ans[ele]=ans[curr]+weight;
-                    dfs(ele,adj,ans,visited);
-                }
-                else
-                {
-                    if(ans[curr]+weight < ans[ele])
-                    {
-                        ans[ele]= ans[curr]+weight;
-                        dfs(ele,adj,ans,visited);
-                    }
+                    dfs(ele,adj,visited,s);
                 }
             }
+        s.push(curr);
             
-  }
+    }
      vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
         //make adjacency List 
         vector<pair<int,int>>adj[N];
@@ -43,13 +36,36 @@ class Solution {
             adj[src].push_back({des,weight});
         }
         
-        vector<int>ans(N,-1);
+        vector<int>dist(N,INT_MAX);
         vector<bool>visited(N,0);
-        //Apply dfs
+        stack<int>s;
+        //Apply dfs to get topological sort vector
        
-        ans[0]=0;
-        dfs(0,adj,ans,visited);
-        return ans;
+        dist[0]=0;
+        dfs(0,adj,visited,s);
+        
+        
+        //empty the stack and relax the neighbours 
+        while(!s.empty())
+        {
+            int curr=s.top();
+            s.pop();
+            for(auto it : adj[curr])
+            {
+                int ele=it.first;
+                int weight=it.second;
+                //Relax the neighbour
+                dist[ele]=min(dist[ele],dist[curr]+weight);
+            }
+        }
+        //convert INT_MAX to -1
+        for(int i=0;i<N;i++)
+        {
+            if(dist[i]==INT_MAX)
+            dist[i]=-1;
+        }
+        
+        return dist;
     }
 };
 
